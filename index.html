@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Elite Casino Experience</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700&display=swap');
+
+  /* Reset */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: radial-gradient(ellipse at center, #1b1b1b 0%, #0d0d0d 100%);
+    font-family: 'Orbitron', sans-serif;
+    color: #f4f1de;
+    overflow-x: hidden;
+  }
+  a {
+    color: #7c1616;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  a:hover {
+    color: #d49f0b;
+  }
+  header {
+    background: #0f0f0fcc;
+    padding: 0.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    box-shadow: 0 0 12px #d49f0bcc;
+  }
+  header h1 {
+    font-family: 'Press Start 2P', cursive;
+    font-weight: 400;
+    font-size: 1.5rem;
+    color: #d49f0b;
+    user-select: none;
+    letter-spacing: 3px;
+  }
+  nav ul {
+    display: flex;
+    gap: 2rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  nav ul li {
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  nav ul li button {
+    background: none;
+    border: none;
+    color: #f4f1de;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+  }
+  nav ul li button:hover, nav ul li button.active {
+    color: #d49f0b;
+    text-shadow: 0 0 8px #d49f0b;
+  }
+
+  main {
+    padding: 3rem 2rem 5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-family: 'Press Start 2P', cursive;
+    color: #d49f0b;
+    text-shadow: 0 0 15px #d49f0b;
+  }
+  .hero h2 {
+    font-size: 2.3rem;
+    margin-bottom: 0.8rem;
+  }
+  .hero p {
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    color: #f4f1decc;
+  }
+
+  section {
+    display: none;
+    animation: fadeIn 1s ease forwards;
+    margin-bottom: 4rem;
+  }
+
+  section.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(15px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+  /* Games styles */
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
+    gap: 2rem;
+  }
+  .game-card {
+    background: #222;
+    border-radius: 15px;
+    box-shadow: 0 0 15px #d49f0b99 inset;
+    padding: 1rem;
+    color: #f4f1de;
+    user-select: none;
+  }
+  .game-card h3 {
+    text-align: center;
+    margin-top: 0;
+    color: #d49f0b;
+    text-shadow: 0 0 10px #d49f0b;
+  }
+  .slot-machine {
+    text-align: center;
+  }
+  .slot-reels {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+  }
+  .reel {
+    width: 60px;
+    height: 60px;
+    margin: 0 8px;
+    background: #000;
+    border: 3px solid #d49f0b;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.3rem;
+    color: #d49f0b;
+    text-shadow: 0 0 8px #d49f0b;
+    font-weight: 700;
+    transition: transform 0.3s ease;
+  }
+  .slot-button {
+    background: #d49f0b;
+    border: none;
+    color: #1b1b1b;
+    padding: 0.7rem 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: 'Orbitron', sans-serif;
+    margin-top: 1rem;
+    box-shadow: 0 0 12px #d49f0baa;
+    transition: background 0.3s;
+  }
+  .slot-button:hover {
+    background: #e4b919;
+  }
+  .slot-message {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    min-height: 24px;
+    text-shadow: 0 0 6px #d49f0bcc;
+  }
+
+  /* Roulette styles */
+  .roulette-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .roulette-wheel {
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    border: 12px solid #d49f0b;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 12px #d49f0bbc inset;
+    margin: 1.5rem 0;
+  }
+  .roulette-pointer {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; 
+    height: 0; 
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 25px solid #d49f0b;
+    filter: drop-shadow(0 0 6px #d49f0b);
+    z-index: 10;
+  }
+  .roulette-segment {
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 50%;
+    transform-origin: 100% 50%;
+    border: 2px solid #111;
+    color: #f4f1de;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-shadow: 0 0 5px #d49f0b;
+    user-select: none;
+  }
+  .roulette-button {
+    margin-top: 1rem;
+    background: #d49f0b;
+    border: none;
+    color: #1b1b1b;
+    padding: 0.7rem 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: 'Orbitron', sans-serif;
+    box-shadow: 0 0 12px #d49f0baa;
+    transition: background 0.3s;
+  }
+  .roulette-button:hover {
+    background: #e4b919;
+  }
+  .roulette-msg {
+    margin-top: 1rem;
+    min-height: 24px;
+    font-size: 1.1rem;
+    text-shadow: 0 0 6px #d49f0bcc;
+  }
+
+  /* Blackjack styles */
+  .blackjack-container {
+    text-align: center;
+  }
+  .cards {
+    margin: 1rem auto;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    min-height: 130px;
+  }
+  .card {
+    width: 80px;
+    height: 120px;
+    background: linear-gradient(135deg, #d49f0b, #b27701);
+    border-radius: 10px;
+    box-shadow: 0 0 10px #d49f0bcc;
+    color: #1b1b1b;
+    font-weight: 900;
+    font-family: 'Press Start 2P', cursive;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    position: relative;
+  }
+  .card.red {
+    color: #da1f26;
+  }
+  .blackjack-buttons {
+    margin-top: 1rem;
+  }
+  .blackjack-buttons button {
+    margin: 0 10px;
+    background: #d49f0b;
+    border: none;
+    color: #1b1b1b;
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: 'Orbitron', sans-serif;
+    box-shadow: 0 0 12px #d49f0baa;
+    transition: background 0.3s;
+  }
+  .blackjack-buttons button:hover {
+    background: #e4b919;
+  }
+  .blackjack-msg {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    min-height: 24px;
+    text-shadow: 0 0 6px #d49f0bcc;
+  }
+
+  /* Crypto store styles */
+  .crypto-store {
+    text-align: center;
+  }
+  .crypto-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+  }
+  .crypto-item {
+    background: #222;
+    border-radius: 15px;
+    width: 200px;
+    box-shadow: 0 0 15px #d49f0b99 inset;
+    padding: 1rem;
+    color: #f4f1de;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .crypto-item img {
+    width: 140px;
+    height: 140px;
+    border-radius: 15px;
+    border: 3px solid #d49f0b;
+    margin-bottom: 1rem;
+    object-fit: cover;
+    box-shadow: 0 0 10px #d49f0bcc;
+  }
+  .crypto-item h4 {
+    margin: 0 0 0.5rem 0;
+    color: #d49f0b;
+    text-shadow: 0 0 6px #d49f0bcc;
+  }
+  .crypto-item button {
+    background: #d49f0b;
+    border: none;
+    color: #1b1b1b;
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: 'Orbitron', sans-serif;
+    box-shadow: 0 0 12px #d49f0baa;
+    transition: background 0.3s;
+    margin-top: auto;
+  }
+  .crypto-item button:hover {
+    background: #e4b919;
+  }
+  .wallet-info {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    color: #d49f0b;
+    text-shadow: 0 0 8px #d49f0b;
+  }
+  .store-msg {
+    margin-top: 1rem;
+    min-height: 24px;
+    font-size: 1.1rem;
+    text-shadow: 0 0 6px #d49f0bcc;
+  }
+
+  /* Payments form styles */
+  .payments-form {
+    max-width: 400px;
+    margin: 0 auto;
+    background: #222;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 0 20px #d49f0bcc;
+    user-select: none;
+  }
+  .payments-form h3 {
+    color: #d49f0b;
+    text-align: center;
+    margin-bottom: 1.8rem;
+    text-shadow: 0 0 6px #d49f0bcc;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.4rem;
+  }
+  .payments-form label {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.4rem;
+    color: #f4f1de;
+    text-shadow: 0 0 3px #000;
+  }
+  .payments-form input, .payments-form select {
+    width: 100%;
+    padding: 0.5rem 0.8rem;
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 1rem;
+    font-family: 'Orbitron', sans-serif;
+  }
+  .payments-form input:focus, .payments-form select:focus {
+    outline: 2px solid #d49f0b;
+    background: #333;
+    color: #d49f0b;
+  }
+  .payments-form button {
+    background: #d49f0b;
+    border: none;
+    color: #1b1b1b;
+    padding: 0.7rem 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: 'Orbitron', sans-serif;
+    width: 100%;
+    box-shadow: 0 0 15px #d49f0baa;
+    transition: background 0.3s;
+  }
+  .payments-form button:hover {
+    background: #e4b919;
+  }
+  .payment-msg {
+    margin-top: 1rem;
+    text-align: center;
+    min-height: 24px;
+    font-weight: 700;
+    color: #d49f0b;
+    text-shadow: 0 0 6px #d49f0bcc;
+  }
+
+  /* Footer */
+  footer {
+    background: #0f0f0fcc;
+    text-align: center;
+    padding: 1rem 2rem;
+    border-top: 2px solid #d49f0b;
+    color: #d49f0b99;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 1.2px;
+  }
+
+  /* Scrollbar styling for Chrome/Edge */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #1b1b1b;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #d49f0b;
+    border-radius: 10px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Elite Casino</h1>
+  <nav>
+    <ul>
+      <li><button class="nav-button active" data-target="games-section">Games</button></li>
+      <li><button class="nav-button" data-target="crypto-store-section">Crypto Store</button></li>
+      <li><button class="nav-button" data-target="payments-section">Payments</button></li>
+      <li><button class="nav-button" data-target="about-section">About</button></li>
+    </ul>
+  </nav>
+</header>
+<main>
+  <section class="hero">
+    <h2>Welcome to Elite Casino</h2>
+    <p>Experience the thrill of Las Vegas from the comfort of your home. Play exciting games, shop exclusive crypto assets, and enjoy seamless payments. Fortune awaits!</p>
+  </section>
+
+  <section id="games-section" class="active" aria-label="Casino Games">
+    <h2 style="text-align:center; color:#d49f0b; text-shadow:0 0 12px #d49f0b;">Play Our Games</h2>
+    <div class="games-grid">
+      <article class="game-card" id="slot-machine-game" aria-label="Slot Machine Game">
+        <h3>Slot Machine</h3>
+        <div class="slot-machine" aria-live="polite" aria-atomic="true">
+          <div class="slot-reels" role="list" aria-label="Slot machine reels">
+            <div class="reel" role="listitem" aria-label="Reel 1">7</div>
+            <div class="reel" role="listitem" aria-label="Reel 2">7</div>
+            <div class="reel" role="listitem" aria-label="Reel 3">7</div>
+          </div>
+          <button class="slot-button" aria-describedby="slot-message" id="slot-spin-btn" aria-label="Spin the slot machine">Spin</button>
+          <div class="slot-message" id="slot-message" role="status"></div>
+        </div>
+      </article>
+
+      <article class="game-card" id="roulette-game" aria-label="Roulette Game">
+        <h3>Roulette</h3>
+        <div class="roulette-container">
+          <div class="roulette-wheel" role="region" aria-label="Roulette wheel" id="roulette-wheel">
+            <div class="roulette-pointer"></div>
+            <!-- Roulette segments populated by JS -->
+          </div>
+          <button class="roulette-button" id="roulette-spin-btn" aria-describedby="roulette-msg" aria-label="Spin the roulette wheel">Spin Roulette</button>
+          <div class="roulette-msg" id="roulette-msg" role="status"></div>
+        </div>
+      </article>
+
+      <article class="game-card" id="blackjack-game" aria-label="Blackjack Game">
+        <h3>Blackjack</h3>
+        <div class="blackjack-container" role="region" aria-label="Blackjack game">
+          <div><strong>Your Hand</strong></div>
+          <div class="cards" id="player-cards" aria-live="polite" aria-atomic="true"></div>
+
+          <div><strong>Dealer's Hand</strong></div>
+          <div class="cards" id="dealer-cards" aria-live="polite" aria-atomic="true"></div>
+
+          <div class="blackjack-buttons">
+            <button id="blackjack-hit-btn" aria-label="Take another card">Hit</button>
+            <button id="blackjack-stand-btn" aria-label="Stand">Stand</button>
+            <button id="blackjack-reset-btn" aria-label="Start new game">New Game</button>
+          </div>
+          <div class="blackjack-msg" id="blackjack-msg" role="status" aria-live="polite"></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="crypto-store-section" aria-label="Crypto Store">
+    <h2 style="text-align:center; color:#d49f0b; text-shadow:0 0 12px #d49f0b;">Crypto Store</h2>
+    <div class="wallet-info" id="wallet-balance">Wallet Balance: 500.00 ETH</div>
+    <div class="crypto-store">
+      <div class="crypto-items" id="crypto-items">
+        <!-- Items loaded by JS -->
+      </div>
+      <div class="store-msg" id="store-msg" role="status"></div>
+    </div>
+  </section>
+
+  <section id="payments-section" aria-label="Payments">
+    <h2 style="text-align:center; color:#d49f0b; text-shadow:0 0 12px #d49f0b;">Payments</h2>
+    <form class="payments-form" id="payments-form" aria-live="polite" aria-atomic="true" aria-describedby="payment-msg">
+      <h3>Deposit / Withdraw</h3>
+      <label for="payment-type">Payment Type</label>
+      <select id="payment-type" name="payment-type" required>
+        <option value="card">Credit / Debit Card</option>
+        <option value="crypto">Cryptocurrency</option>
+      </select>
+
+      <div id="card-fields">
+        <label for="card-number">Card Number</label>
+        <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" maxlength="19" pattern="\\d{4} \\d{4} \\d{4} \\d{4}" inputmode="numeric" />
+        <label for="card-expiry">Expiry (MM/YY)</label>
+        <input type="text" id="card-expiry" name="card-expiry" placeholder="MM/YY" maxlength="5" pattern="(0[1-9]|1[0-2])\\/\\d{2}" />
+        <label for="card-cvc">CVC</label>
+        <input type="text" id="card-cvc" name="card-cvc" placeholder="123" maxlength="3" pattern="\\d{3}" inputmode="numeric" />
+      </div>
+
+      <div id="crypto-fields" style="display:none;">
+        <label for="crypto-wallet">Crypto Wallet Address</label>
+        <input type="text" id="crypto-wallet" name="crypto-wallet" placeholder="0xABC123..." maxlength="42" />
+        <label for="crypto-amount">Amount (ETH)</label>
+        <input type="number" id="crypto-amount" name="crypto-amount" placeholder="0.01" min="0.01" step="0.01" />
+      </div>
+
+      <button type="submit" aria-label="Submit payment">Submit</button>
+      <div class="payment-msg" id="payment-msg" role="alert"></div>
+    </form>
+  </section>
+
+  <section id="about-section" aria-label="About Elite Casino">
+    <h2 style="text-align:center; color:#d49f0b; text-shadow:0 0 12px #d49f0b;">About Elite Casino</h2>
+    <p style="max-width:700px; margin: 1rem auto; line-height:1.6; font-family: 'Orbitron', sans-serif;">
+      Elite Casino is your premier destination for thrilling online gambling entertainment. Featuring state-of-the-art digital casino games, extensive crypto-store assets, and seamless payment options, we offer a secure, exhilarating, and immersive experience to players worldwide. Whether you're spinning the slots, betting the roulette, or testing your skill at blackjack, our platform is designed to provide unmatched excitement with a modern touch of luxury. Join us and be a part of the elite players' community where fortune favors the bold.
+    </p>
+  </section>
+</main>
+
+<footer>
+  <p>© 2024 Elite Casino. All rights reserved. | <a href="#about-section">About Us</a> | <a href="#payments-section">Payments Info</a></p>
+</footer>
+
+<script>
+  // Navigation tab system
+  const navButtons = document.querySelectorAll('.nav-button');
+  const sections = {
+    "games-section": document.getElementById('games-section'),
+    "crypto-store-section": document.getElementById('crypto-store-section'),
+    "payments-section": document.getElementById('payments-section'),
+    "about-section": document.getElementById('about-section'),
+  };
+  navButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      navButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      for (const key in sections) {
+        sections[key].classList.remove('active');
+      }
+      const target = btn.dataset.target;
+      if(sections[target]) {
+        sections[target].classList.add('active');
+      }
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // --- Slot Machine Game ---
+  const slotSpinBtn = document.getElementById('slot-spin-btn');
+  const slotReels = document.querySelectorAll('.slot-machine .reel');
+  const slotMessage = document.getElementById('slot-message');
+
+  const slotSymbols = ['7', '🍒', '🍋', '⭐', '🍀', '🔔'];
+
+  function randomSlotSymbol() {
+    return slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+  }
+
+  function spinSlot() {
+    slotSpinBtn.disabled = true;
+    slotMessage.textContent = 'Spinning... Good luck!';
+    let spinCount = 0;
+    const maxSpin = 20;
+    const spinInterval = setInterval(() => {
+      slotReels.forEach(reel => {
+        reel.textContent = randomSlotSymbol();
+        reel.style.transform = `rotate(${Math.random()*360}deg)`;
+      });
+      spinCount++;
+      if(spinCount >= maxSpin) {
+        clearInterval(spinInterval);
+        checkSlotResult();
+        slotSpinBtn.disabled = false;
+      }
+    }, 100);
+  }
+
+  function checkSlotResult() {
+    const results = Array.from(slotReels).map(r => r.textContent);
+    const first = results[0];
+    const allMatch = results.every(sym => sym === first);
+    if(allMatch) {
+      slotMessage.textContent = `🎉 Jackpot! Triple ${first}! You win big! 🎉`;
+    } else if(results.some((sym, idx, arr) => arr.indexOf(sym) !== idx)) {
+      slotMessage.textContent = `Nice! Two matching symbols! You win a small prize!`;
+    } else {
+      slotMessage.textContent = 'No match this time. Spin again!';
+    }
+    slotReels.forEach(reel => { reel.style.transform = 'rotate(0deg)'; });
+  }
+
+  slotSpinBtn.addEventListener('click', spinSlot);
+
+  // --- Roulette Game ---
+  const rouletteWheel = document.getElementById('roulette-wheel');
+  const rouletteSpinBtn = document.getElementById('roulette-spin-btn');
+  const rouletteMsg = document.getElementById('roulette-msg');
+
+  const rouletteSectors = [
+    {number: 0, color: 'green'},
+    {number: 32, color: 'red'},
+    {number: 15, color: 'black'},
+    {number: 19, color: 'red'},
+    {number: 4, color: 'black'},
+    {number: 21, color: 'red'},
+    {number: 2, color: 'black'},
+    {number: 25, color: 'red'},
+    {number: 17, color: 'black'},
+    {number: 34, color: 'red'},
+    {number: 6, color: 'black'},
+    {number: 27, color: 'red'},
+    {number: 13, color: 'black'},
+    {number: 36, color: 'red'},
+    {number: 11, color: 'black'},
+    {number: 30, color: 'red'},
+    {number: 8, color: 'black'},
+    {number: 23, color: 'red'},
+    {number: 10, color: 'black'},
+    {number: 5, color: 'red'},
+    {number: 24, color: 'black'},
+    {number: 16, color: 'red'},
+    {number: 33, color: 'black'},
+    {number: 1, color: 'red'},
+    {number: 20, color: 'black'},
+    {number: 14, color: 'red'},
+    {number: 31, color: 'black'},
+    {number: 9, color: 'red'},
+    {number: 22, color: 'black'},
+    {number: 18, color: 'red'},
+    {number: 29, color: 'black'},
+    {number: 7, color: 'red'},
+    {number: 28, color: 'black'},
+    {number: 12, color: 'red'},
+    {number: 35, color: 'black'},
+    {number: 3, color: 'red'},
+    {number: 26, color: 'black'},
+  ];
+
+  // Create roulette segments visually
+  function renderRouletteSegments(){
+    rouletteSectors.forEach((sector,i) => {
+      const segment = document.createElement('div');
+      segment.classList.add('roulette-segment');
+      segment.style.transform = `rotate(${i * (360/rouletteSectors.length)}deg) skewY(-60deg)`;
+      segment.style.backgroundColor = sector.color === 'red' ? '#7c1616cc' : (sector.color === 'black' ? '#222' : '#0f4d0fcc');
+      segment.style.color = sector.color === 'green' ? '#a0f0a0cc' : '#f4f1de';
+      segment.textContent = sector.number;
+      rouletteWheel.appendChild(segment);
+    });
+  }
+  renderRouletteSegments();
+
+  function easeOutQuart(x) {
+    return 1 - Math.pow(1 - x, 4);
+  }
+
+  function spinRoulette() {
+    rouletteSpinBtn.disabled = true;
+    rouletteMsg.textContent = 'Spinning the wheel...';
+    let start = null;
+    const duration = 5000;
+    const rounds = 8 + Math.floor(Math.random() * 4);
+    const maxDeg = rounds * 360 + Math.floor(Math.random() * 360);
+    function animate(timestamp) {
+      if (!start) start = timestamp;
+      const elapsed = timestamp - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = easeOutQuart(progress);
+
+      const rotation = eased * maxDeg;
+      rouletteWheel.style.transform = `rotate(${rotation}deg)`;
+
+      if (elapsed < duration) {
+        requestAnimationFrame(animate);
+      } else {
+        // Determine final sector
+        const finalRotation = rotation % 360;
+        let index = rouletteSectors.length - Math.floor(finalRotation / (360 / rouletteSectors.length)) - 1;
+        if(index < 0) index = rouletteSectors.length + index;
+        const winningSector = rouletteSectors[index];
+        rouletteMsg.textContent = `🎉 The ball landed on ${winningSector.number} (${winningSector.color.toUpperCase()})! 🎉`;
+        rouletteSpinBtn.disabled = false;
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  rouletteSpinBtn.addEventListener('click', spinRoulette);
+
+  // --- Blackjack Game ---
+  const blackjackHitBtn = document.getElementById('blackjack-hit-btn');
+  const blackjackStandBtn = document.getElementById('blackjack-stand-btn');
+  const blackjackResetBtn = document.getElementById('blackjack-reset-btn');
+  const playerCardsContainer = document.getElementById('player-cards');
+  const dealerCardsContainer = document.getElementById('dealer-cards');
+  const blackjackMsg = document.getElementById('blackjack-msg');
+
+  const suits = ['♠', '♥', '♦', '♣'];
+  const cardValuesMap = {
+    '2': 2, '3': 3, '4': 4, '5':5, '6':6, '7':7, '8':8, '9':9, '10':10,
+    'J':10, 'Q':10, 'K':10, 'A':11
+  };
+  const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+
+  let deck = [];
+  let playerHand = [];
+  let dealerHand = [];
+  let gameOver = false;
+
+  function createDeck() {
+    const newDeck = [];
+    suits.forEach(suit => {
+      ranks.forEach(rank => {
+        newDeck.push({rank, suit});
+      });
+    });
+    return newDeck;
+  }
+
+  function shuffleDeck(deck) {
+    for(let i=deck.length - 1; i>0; i--) {
+      const j = Math.floor(Math.random() * (i+1));
+      [deck[i],deck[j]] = [deck[j],deck[i]];
+    }
+  }
+
+  function calculateHandValue(hand) {
+    let value = 0;
+    let aceCount = 0;
+    hand.forEach(card => {
+      value += cardValuesMap[card.rank];
+      if(card.rank === 'A') aceCount++;
+    });
+    while(value > 21 && aceCount > 0) {
+      value -= 10;
+      aceCount--;
+    }
+    return value;
+  }
+
+  function displayCards(container, hand, hideFirst = false) {
+    container.innerHTML = '';
+    hand.forEach((card, i) => {
+      const cardDiv = document.createElement('div');
+      cardDiv.className = 'card';
+      if(card.suit === '♥' || card.suit === '♦') cardDiv.classList.add('red');
+      if(hideFirst && i === 0) {
+        cardDiv.textContent = '🂠';
+      } else {
+        cardDiv.textContent = `${card.rank}${card.suit}`;
+      }
+      container.appendChild(cardDiv);
+    });
+  }
+
+  function startBlackjack() {
+    deck = createDeck();
+    shuffleDeck(deck);
+    playerHand = [deck.pop(), deck.pop()];
+    dealerHand = [deck.pop(), deck.pop()];
+    gameOver = false;
+    blackjackMsg.textContent = '';
+    displayCards(playerCardsContainer, playerHand);
+    displayCards(dealerCardsContainer, dealerHand, true);
+    checkBlackjack();
+  }
+
+  function checkBlackjack() {
+    const playerVal = calculateHandValue(playerHand);
+    const dealerVal = calculateHandValue(dealerHand);
+    if(playerVal === 21) {
+      blackjackMsg.textContent = 'Blackjack! You win! 🎉';
+      gameOver = true;
+    } else if(dealerVal === 21) {
+      blackjackMsg.textContent = 'Dealer has Blackjack! You lose!';
+      gameOver = true;
+      displayCards(dealerCardsContainer, dealerHand);
+    }
+  }
+
+  function blackjackHit() {
+    if(gameOver) return;
+    playerHand.push(deck.pop());
+    displayCards(playerCardsContainer, playerHand);
+    const val = calculateHandValue(playerHand);
+    if(val > 21) {
+      blackjackMsg.textContent = 'Bust! You lose! 💥';
+      gameOver = true;
+      displayCards(dealerCardsContainer, dealerHand);
+    }
+  }
+
+  function blackjackStand() {
+    if(gameOver) return;
+    displayCards(dealerCardsContainer, dealerHand);
+    let dealerVal = calculateHandValue(dealerHand);
+    while(dealerVal < 17) {
+      dealerHand.push(deck.pop());
+      displayCards(dealerCardsContainer, dealerHand);
+      dealerVal = calculateHandValue(dealerHand);
+    }
+    const playerVal = calculateHandValue(playerHand);
+    if(dealerVal > 21) {
+      blackjackMsg.textContent = 'Dealer busts! You win! 🎉';
+    } else if(dealerVal > playerVal) {
+      blackjackMsg.textContent = 'Dealer wins! You lose!';
+    } else if(dealerVal < playerVal) {
+      blackjackMsg.textContent = 'You win! 🎉';
+    } else {
+      blackjackMsg.textContent = 'Push! It\'s a tie.';
+    }
+    gameOver = true;
+  }
+
+  blackjackHitBtn.addEventListener('click', blackjackHit);
+  blackjackStandBtn.addEventListener('click', blackjackStand);
+  blackjackResetBtn.addEventListener('click', startBlackjack);
+  startBlackjack();
+
+  // --- Crypto Store ---
+  const cryptoItemsContainer = document.getElementById('crypto-items');
+  const storeMsg = document.getElementById('store-msg');
+  const walletBalanceEl = document.getElementById('wallet-balance');
+
+  let walletBalance = 500.00; // ETH
+
+  const cryptoAssets = [
+    {id: 1, name: 'Golden Chip NFT', priceETH: 2.5, image: 'https://i.ibb.co/7tqKRxW/golden-chip.png'},
+    {id: 2, name: 'Diamond Card', priceETH: 1.2, image: 'https://i.ibb.co/f1kKHMN/diamond-card.png'},
+    {id: 3, name: 'Lucky Clover Token', priceETH: 0.5, image: 'https://i.ibb.co/cxn7FHh/lucky-clover.png'},
+    {id: 4, name: 'Royal Roulette NFT', priceETH: 3.1, image: 'https://i.ibb.co/BGzJh3H/roulette-nft.png'},
+    {id: 5, name: 'VIP Slot Machine Pass', priceETH: 1.8, image: 'https://i.ibb.co/cFDxFZH/vip-slot.png'},
+  ];
+
+  function renderCryptoItems() {
+    cryptoItemsContainer.innerHTML = '';
+    cryptoAssets.forEach(asset => {
+      const item = document.createElement('div');
+      item.className = 'crypto-item';
+      item.setAttribute('tabindex', '0');
+      item.innerHTML = `
+        <img src="${asset.image}" alt="${asset.name} image" loading="lazy">
+        <h4>${asset.name}</h4>
+        <div>Price: ${asset.priceETH.toFixed(2)} ETH</div>
+        <button aria-label="Buy ${asset.name} for ${asset.priceETH.toFixed(2)} Ethereum">Buy</button>
+      `;
+      item.querySelector('button').addEventListener('click', () => buyCryptoAsset(asset.id));
+      cryptoItemsContainer.appendChild(item);
+    });
+  }
+
+  function buyCryptoAsset(assetId) {
+    const asset = cryptoAssets.find(a => a.id === assetId);
+    if(!asset) return;
+    if(walletBalance >= asset.priceETH) {
+      walletBalance -= asset.priceETH;
+      walletBalanceEl.textContent = `Wallet Balance: ${walletBalance.toFixed(2)} ETH`;
+      storeMsg.textContent = `You purchased ${asset.name} for ${asset.priceETH.toFixed(2)} ETH. Enjoy! 🎉`;
+    } else {
+      storeMsg.textContent = `Insufficient wallet balance to buy ${asset.name}.`;
+    }
+    setTimeout(() => storeMsg.textContent = '', 5000);
+  }
+
+  renderCryptoItems();
+
+  // --- Payments Form ---
+  const paymentsForm = document.getElementById('payments-form');
+  const paymentTypeSelect = document.getElementById('payment-type');
+  const cardFields = document.getElementById('card-fields');
+  const cryptoFields = document.getElementById('crypto-fields');
+  const paymentMsg = document.getElementById('payment-msg');
+
+  paymentTypeSelect.addEventListener('change', () => {
+    if(paymentTypeSelect.value === 'card') {
+      cardFields.style.display = 'block';
+      cryptoFields.style.display = 'none';
+    } else {
+      cardFields.style.display = 'none';
+      cryptoFields.style.display = 'block';
+    }
+    paymentMsg.textContent = '';
+  });
+
+  paymentsForm.addEventListener('submit', e => {
+    e.preventDefault();
+    paymentMsg.textContent = '';
+    if(paymentTypeSelect.value === 'card') {
+      // Simple card validation
+      const cardNumber = document.getElementById('card-number').value.trim();
+      const cardExpiry = document.getElementById('card-expiry').value.trim();
+      const cardCvc = document.getElementById('card-cvc').value.trim();
+      const cardNumberRegex = /^\d{4} \d{4} \d{4} \d{4}$/;
+      const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+      const cvcRegex = /^\d{3}$/;
+      if(!cardNumberRegex.test(cardNumber)) {
+        paymentMsg.textContent = 'Please enter a valid card number (format: 1234 5678 9012 3456).';
+        return;
+      }
+      if(!expiryRegex.test(cardExpiry)) {
+        paymentMsg.textContent = 'Please enter a valid expiry date (MM/YY).';
+        return;
+      }
+      if(!cvcRegex.test(cardCvc)) {
+        paymentMsg.textContent = 'Please enter a valid CVC (3 digits).';
+        return;
+      }
+      paymentMsg.textContent = 'Card payment processed successfully! Thank you for your deposit.';
+    } else {
+      // Crypto validation
+      const wallet = document.getElementById('crypto-wallet').value.trim();
+      const amount = parseFloat(document.getElementById('crypto-amount').value);
+      if(wallet.length < 10) {
+        paymentMsg.textContent = 'Please enter a valid crypto wallet address.';
+        return;
+      }
+      if(isNaN(amount) || amount < 0.01) {
+        paymentMsg.textContent = 'Please enter a valid amount (minimum 0.01 ETH).';
+        return;
+      }
+      paymentMsg.textContent = `Crypto payment of ${amount.toFixed(2)} ETH processed successfully! Thank you!`;
+    }
+    paymentsForm.reset();
+    cardFields.style.display = 'block';
+    cryptoFields.style.display = 'none';
+  });
+
+</script>
+</body>
+</html>
+
